@@ -104,4 +104,11 @@ export class TurmasController {
   async listAlunosByTurma(@Param('id') turmaId: number) {
     return this.turmasService.findAlunosByTurma(turmaId);
   }
+
+  @RoleDecorator(Role.professor)
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Get('alunos')
+  async listarTodosAlunos() {
+    return this.turmasService.findAllAlunos();
+  }
 }

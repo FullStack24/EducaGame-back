@@ -86,4 +86,13 @@ export class TurmasService {
       where: { id: turmaId },
     });
   }
+
+  async findAllAlunos() {
+    return this.prisma.user.findMany({
+      where: {
+        role: 'aluno',
+      },
+    });
+  }
+
 }
