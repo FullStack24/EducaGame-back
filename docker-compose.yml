@@ -26,7 +26,7 @@ services:
 
   frontend:
     build: ../educagame-front
-    container_name: educagame_frontend
+    container_name: educa_game_frontend
     restart: always
     environment:
       NEXT_PUBLIC_API_URL: http://educagame_backend:4000
