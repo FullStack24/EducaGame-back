@@ -48,7 +48,9 @@ export class TurmasService {
 
   async findProfessorTurmas(professorId: number) {
     return this.prisma.turma.findMany({
-      where: { professorId },
+      where: {
+        OR: [{ professorId }, { alunos: { some: { id: professorId } } }],
+      },
       include: { alunos: true },
     });
   }

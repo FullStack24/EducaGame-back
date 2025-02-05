@@ -62,7 +62,7 @@ export class TurmasController {
   }
 
   @Get('me')
-  @RoleDecorator(Role.professor)
+  // @RoleDecorator(Role.professor)
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   async listProfessorTurmas(@Request() req: RequestWithUser) {
     const professorId = req.user.id;
@@ -99,7 +99,7 @@ export class TurmasController {
   }
 
   @Get(':id/alunos')
-  @RoleDecorator(Role.professor)
+  // @RoleDecorator(Role.professor)
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   async listAlunosByTurma(@Param('id') turmaId: number) {
     return this.turmasService.findAlunosByTurma(turmaId);
