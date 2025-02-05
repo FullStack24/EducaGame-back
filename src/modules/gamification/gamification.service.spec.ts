@@ -156,4 +156,87 @@ describe('GamificationService', () => {
       expect(result).toEqual(mockBadge);
     });
   });
+
+  describe('obterResultadosAluno', () => {
+    it('deve retornar os resultados de um aluno para uma turma', async () => {
+      const mockResultados = [
+        {
+          id: 1,
+          alunoId: 1,
+          quizId: 1,
+          pontuacao: 50,
+          quiz: { id: 1, title: 'Quiz 1' },
+        },
+        {
+          id: 2,
+          alunoId: 1,
+          quizId: 2,
+          pontuacao: 30,
+          quiz: { id: 2, title: 'Quiz 2' },
+        },
+      ];
+
+      prisma.resultado.findMany.mockResolvedValueOnce(mockResultados);
+
+      const result = await service.obterResultadosAluno(1, 1);
+
+      expect(prisma.resultado.findMany).toHaveBeenCalledWith({
+        where: { alunoId: 1, quiz: { turmaId: 1 } },
+        include: { quiz: true },
+      });
+      expect(result).toEqual(mockResultados);
+    });
+  });
+
+  describe('obterRelatorioTurma', () => {
+    it('deve retornar o relatório de uma turma', async () => {
+      const mockRelatorio = [
+        {
+          id: 1,
+          alunoId: 1,
+          quizId: 1,
+          pontuacao: 50,
+          aluno: { id: 1, name: 'Aluno 1' },
+          quiz: { id: 1, title: 'Quiz 1' },
+        },
+        {
+          id: 2,
+          alunoId: 2,
+          quizId: 1,
+          pontuacao: 30,
+          aluno: { id: 2, name: 'Aluno 2' },
+          quiz: { id: 1, title: 'Quiz 1' },
+        },
+      ];
+
+      prisma.resultado.findMany.mockResolvedValueOnce(mockRelatorio);
+
+      const result = await service.obterRelatorioTurma(1);
+
+      expect(prisma.resultado.findMany).toHaveBeenCalledWith({
+        where: { quiz: { turmaId: 1 } },
+        include: { aluno: true, quiz: true },
+        orderBy: { pontuacao: 'desc' },
+      });
+      expect(result).toEqual(mockRelatorio);
+    });
+  });
+
+  describe('obterBadgesAluno', () => {
+    it('deve retornar todos os badges de um aluno', async () => {
+      const mockBadges = [
+        { id: 1, title: 'Primeiro Lugar', alunoId: 1, createdAt: new Date() },
+        { id: 2, title: 'Participação', alunoId: 1, createdAt: new Date() },
+      ];
+
+      prisma.badge.findMany.mockResolvedValueOnce(mockBadges);
+
+      const result = await service.obterBadgesAluno(1);
+
+      expect(prisma.badge.findMany).toHaveBeenCalledWith({
+        where: { alunoId: 1 },
+      });
+      expect(result).toEqual(mockBadges);
+    });
+  });
 });
