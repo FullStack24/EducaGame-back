@@ -120,17 +120,11 @@ export class UsersController {
   }
 
   @Post('create-aluno')
-  @UseGuards(AuthGuard('jwt'))
   async createAluno(
     @Request() req: RequestWithUser,
     @Body() createAlunoDto: CreateAlunoDto,
   ) {
-    const { role } = req.user;
-
-    if (role !== Role.admin && role !== Role.professor) {
-      throw new BadRequestException('Acesso negado. Permissão necessária.');
-    }
-
+    console.log('Criando: ', createAlunoDto);
     return this.usersService.createUser({
       ...createAlunoDto,
       role: Role.aluno,
