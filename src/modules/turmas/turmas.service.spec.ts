@@ -132,4 +132,33 @@ describe('TurmasService', () => {
       await expect(service.deleteTurma(999)).rejects.toThrow(NotFoundException);
     });
   });
+
+  describe('findAllAlunos', () => {
+    it('deve listar todos os alunos', async () => {
+      const alunosMock = [
+        { id: 1, name: 'Aluno 1', role: 'aluno', turmaId: 1 },
+        { id: 2, name: 'Aluno 2', role: 'aluno', turmaId: 2 },
+      ];
+
+      prisma.user.findMany.mockResolvedValueOnce(alunosMock);
+
+      const result = await service.findAllAlunos();
+
+      expect(result).toEqual(alunosMock);
+      expect(prisma.user.findMany).toHaveBeenCalledWith({
+        where: { role: 'aluno' },
+      });
+    });
+
+    it('deve retornar uma lista vazia se não houver alunos', async () => {
+      prisma.user.findMany.mockResolvedValueOnce([]);
+
+      const result = await service.findAllAlunos();
+
+      expect(result).toEqual([]);
+      expect(prisma.user.findMany).toHaveBeenCalledWith({
+        where: { role: 'aluno' },
+      });
+    });
+  });
 });
