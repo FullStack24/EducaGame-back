@@ -28,7 +28,7 @@ export class TurmasController {
   ) {}
 
   @Post('create')
-  @RoleDecorator(Role.admin)
+  @RoleDecorator(Role.professor)
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   async createTurma(@Body() createTurmaDto: CreateTurmaDto) {
     return this.turmasService.createTurma(createTurmaDto);
