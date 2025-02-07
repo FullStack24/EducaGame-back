@@ -53,6 +53,7 @@ model Pergunta {
   texto     String
   quiz      Quiz       @relation(fields: [quizId], references: [id])
   quizId    Int
+  correta   Boolean
   respostas Resposta[]
   createdAt DateTime   @default(now())
 }

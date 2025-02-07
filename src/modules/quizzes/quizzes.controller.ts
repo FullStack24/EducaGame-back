@@ -8,11 +8,16 @@ import {
   Body,
 } from '@nestjs/common';
 import { QuizzesService } from './quizzes.service';
-import { CreateQuizDto } from './dto/create-quiz.dto';
+import { CreateAskDto, CreateQuizDto } from './dto/create-quiz.dto';
 
 @Controller('quizzes')
 export class QuizzesController {
   constructor(private readonly quizzesService: QuizzesService) {}
+
+  @Post('/ask')
+  async createAsk(@Body() createAskDto: CreateAskDto) {
+    return this.quizzesService.createAsk(createAskDto);
+  }
 
   @Post()
   async createQuiz(@Body() createQuizDto: CreateQuizDto) {
@@ -22,6 +27,11 @@ export class QuizzesController {
   @Get('turma/:id')
   async findQuizzesByTurma(@Param('id') turmaId: number) {
     return this.quizzesService.findQuizzesByTurma(turmaId);
+  }
+
+  @Get(':id')
+  async getAsks(@Param('id') id: number) {
+    return this.quizzesService.getAsks(id);
   }
 
   @Patch(':id')

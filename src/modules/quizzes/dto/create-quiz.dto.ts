@@ -1,5 +1,13 @@
-import { IsString, IsOptional, IsInt } from 'class-validator';
-
+import {
+  IsString,
+  IsInt,
+  IsOptional,
+  IsBoolean,
+  IsArray,
+  IsDate,
+  IsBooleanString,
+  IsNotEmpty,
+} from 'class-validator';
 export class CreateQuizDto {
   @IsString()
   title!: string;
@@ -13,4 +21,15 @@ export class CreateQuizDto {
 
   @IsString()
   categoria!: string;
+}
+
+export class CreateAskDto {
+  @IsString()
+  texto!: string;
+
+  @IsInt()
+  quizId!: number;
+
+  @IsNotEmpty()
+  correta!: boolean | string;
 }
