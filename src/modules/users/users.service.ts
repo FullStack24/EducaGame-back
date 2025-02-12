@@ -73,10 +73,47 @@ export class UsersService {
     });
   }
 
-  async findUserById(id: number): Promise<User | null> {
-    return this.prisma.user.findUnique({
-      where: { id },
-    });
+  async findUserById(id: number) {
+    const [user, turma, quizzes] = await Promise.all([
+      await this.prisma.user.findUnique({
+        where: { id },
+        include: {
+          Activity: true,
+        },
+      }),
+      await this.prisma.turma.findMany({
+        where: {
+          OR: [{ professorId: id }, { alunos: { some: { id: id } } }],
+        },
+        include: {
+          professor: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+          alunos: {
+            select: {
+              name: true,
+            },
+          },
+        },
+      }),
+      await this.prisma.quiz.findMany({
+        where: {
+          OR: [
+            { turma: { professorId: id } },
+            { turma: { alunos: { some: { id: id } } } },
+          ],
+        },
+      }),
+    ]);
+
+    return {
+      turma,
+      ...user,
+      quizzes,
+    };
   }
 
   async findAlunosByProfessor(professorId: number): Promise<User[]> {

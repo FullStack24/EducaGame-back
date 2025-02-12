@@ -26,6 +26,7 @@ export class UsersController {
 
   @Post('register-admin')
   async registerAdmin(@Body() createAdminDto: CreateUserDto) {
+    console.log('CHEGOU', createAdminDto);
     const adminExists = await this.usersService.adminExists();
     if (adminExists) {
       throw new BadRequestException(
@@ -131,18 +132,13 @@ export class UsersController {
     });
   }
 
-  @Patch(':id/edit-aluno')
+  @Patch('')
   @UseGuards(AuthGuard('jwt'))
   async editAluno(
     @Request() req: RequestWithUser,
-    @Param('id') id: string,
     @Body() updateAlunoDto: UpdateUserDto,
   ) {
-    const { role } = req.user;
-
-    if (role !== Role.admin && role !== Role.professor) {
-      throw new BadRequestException('Acesso negado. Permissão necessária.');
-    }
+    const { id } = req.user;
 
     return this.usersService.updateUser(Number(id), updateAlunoDto);
   }
