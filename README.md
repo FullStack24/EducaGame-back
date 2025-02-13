@@ -192,7 +192,7 @@ PORT=3000
 ```
 4. Execute as migrações do banco de dados:
    ```bash
-   npx prisma migrate dev
+  Npx prisma generate && npx prisma db push
    ```
 5. Inicie o servidor de desenvolvimento:
    ```bash
